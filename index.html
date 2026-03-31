@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invoice - DotCom Partner</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+  :root {
+    --navy: #0f1b2d;
+    --navy-mid: #1a2d47;
+    --blue-accent: #1e5ecf;
+    --blue-light: #3b82f6;
+    --gold: #f59e0b;
+    --gold-light: #fcd34d;
+    --text-primary: #0f1b2d;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    --border: #e2e8f0;
+    --bg-light: #f8fafc;
+    --bg-input: #f1f5f9;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --white: #ffffff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: #dde4ed;
+    min-height: 100vh;
+    padding: 24px 16px 60px;
+  }
+
+  /* Toolbar */
+  .toolbar {
+    max-width: 780px;
+    margin: 0 auto 16px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 20px;
+    border-radius: 8px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all .18s ease;
+    text-decoration: none;
+  }
+
+  .btn-primary {
+    background: var(--blue-accent);
+    color: white;
+    box-shadow: 0 3px 12px rgba(30,94,207,.35);
+  }
+  .btn-primary:hover { background: #1749a8; transform: translateY(-1px); }
+
+  .btn-outline {
+    background: white;
+    color: var(--navy);
+    border: 1.5px solid var(--border);
+  }
+  .btn-outline:hover { background: var(--bg-light); }
+
+  .btn-danger {
+    background: #fee2e2;
+    color: var(--danger);
+    border: none;
+  }
+  .btn-danger:hover { background: #fecaca; }
+
+  /* Invoice Card */
+  .invoice-wrap {
+    max-width: 780px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(15,27,45,.15);
+  }
+
+  /* Top stripe */
+  .top-stripe {
+    height: 5px;
+    background: linear-gradient(90deg, var(--blue-accent) 0%, var(--blue-light) 60%, var(--gold) 100%);
+  }
+
+  /* Header */
+  .invoice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 32px 40px 24px;
+  }
+
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-box {
+    width: 44px; height: 44px;
+    background: var(--navy);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 18px;
+    color: white;
+    letter-spacing: -1px;
+    flex-shrink: 0;
+  }
+
+  .logo-text h1 {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: -.3px;
+    line-height: 1;
+  }
+  .logo-text h1 span { color: var(--blue-accent); }
+  .logo-text p {
+    font-size: 9px;
+    letter-spacing: 2.5px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  .invoice-title {
+    text-align: right;
+  }
+  .invoice-title h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #c8d4e8;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+
+  /* Contact info */
+  .contact-bar {
+    display: flex;
+    gap: 24px;
+    padding: 0 40px 24px;
+    flex-wrap: wrap;
+  }
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+  .contact-item svg { color: var(--blue-accent); flex-shrink: 0; }
+
+  .divider { height: 1px; background: var(--border); margin: 0 40px; }
+
+  /* Meta row */
+  .meta-row {
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px 40px;
+  }
+  .meta-table { font-size: 13px; }
+  .meta-table tr td:first-child {
+    color: var(--text-secondary);
+    padding-right: 24px;
+    padding-bottom: 6px;
+    text-align: right;
+  }
+  .meta-table tr td:last-child {
+    font-weight: 600;
+    color: var(--text-primary);
+    padding-bottom: 6px;
+  }
+  .meta-table .inv-no { color: var(--blue-accent); font-weight: 700; }
+  .meta-table .due-date { color: var(--gold); font-weight: 700; }
+
+  /* Status badge */
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px 3px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    user-select: none;
+    transition: .15s;
+  }
+  .status-menunggu { background: #fef3c7; color: #92400e; }
+  .status-lunas { background: #d1fae5; color: #065f46; }
+  .status-dibatalkan { background: #fee2e2; color: #991b1b; }
+
+  .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  /* Two columns */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 20px 40px;
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--blue-accent);
+    margin-bottom: 12px;
+  }
+
+  .input-field {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px;
+    color: var(--text-primary);
+    background: var(--bg-input);
+    margin-bottom: 8px;
+    transition: border-color .15s;
+    outline: none;
+  }
+  .input-field:focus { border-color: var(--blue-accent); background: white; }
+  .input-field::placeholder { color: var(--text-muted); }
+
+  textarea.input-field { resize: vertical; min-height: 80px; }
+
+  /* Payment info box */
+  .payment-box {
+    background: #f0f4ff;
+    border: 1.5px solid #c7d7f9;
+    border-radius: 12px;
+    padding: 18px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .payment-box::before {
+    content: 'Rp';
+    position: absolute;
+    right: 12px; bottom: 4px;
+    font-size: 72px;
+    font-weight: 900;
+    color: #dce8fc;
+    line-height: 1;
+  }
+  .payment-box .bank-name { font-size: 13px; color: var(--text-secondary); margin-bottom: 4px; }
+  .payment-box .account-no {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--blue-accent);
+    letter-spacing: 1px;
+    line-height: 1;
+  }
+  .payment-box .account-name { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
+
+  /* Editable payment fields */
+  .payment-edit .input-field { background: white; margin-bottom: 6px; }
+
+  /* Items table */
+  .items-section { padding: 0 40px 20px; }
+
+  table.items-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  table.items-table thead tr {
+    background: var(--navy);
+    color: white;
+  }
+  table.items-table thead th {
+    padding: 11px 14px;
+    font-weight: 600;
+    letter-spacing: .5px;
+    font-size: 11px;
+    text-transform: uppercase;
+  }
+  table.items-table thead th:first-child { border-radius: 8px 0 0 8px; width: 36px; text-align: center; }
+  table.items-table thead th:last-child { border-radius: 0 8px 8px 0; text-align: right; }
+  table.items-table thead th:nth-child(3),
+  table.items-table thead th:nth-child(4),
+  table.items-table thead th:nth-child(5) { text-align: right; }
+
+  table.items-table tbody tr { border-bottom: 1px solid var(--border); }
+  table.items-table tbody tr:last-child { border-bottom: none; }
+
+  table.items-table tbody td {
+    padding: 10px 14px;
+    vertical-align: middle;
+  }
+  table.items-table tbody td:first-child { text-align: center; color: var(--text-muted); font-size: 12px; }
+  table.items-table tbody td:nth-child(3),
+  table.items-table tbody td:nth-child(4),
+  table.items-table tbody td:nth-child(5) { text-align: right; }
+  table.items-table tbody td:last-child { width: 36px; }
+
+  table.items-table .td-input {
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px;
+    background: transparent;
+    outline: none;
+    transition: .15s;
+    width: 100%;
+  }
+  table.items-table .td-input:focus { border-color: var(--blue-accent); background: var(--bg-input); }
+  table.items-table .td-input.right { text-align: right; }
+
+  .subtotal-cell { font-weight: 600; color: var(--text-primary); }
+
+  .add-item-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    background: none;
+    border: 1.5px dashed var(--border);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: .15s;
+  }
+  .add-item-btn:hover { border-color: var(--blue-accent); color: var(--blue-accent); }
+
+  .delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 4px;
+    border-radius: 4px;
+    transition: .15s;
+    line-height: 0;
+  }
+  .delete-btn:hover { color: var(--danger); background: #fee2e2; }
+
+  /* Notes + Summary */
+  .bottom-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 0 40px 32px;
+    align-items: start;
+  }
+
+  .notes-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  /* Summary box */
+  .summary-box {
+    background: var(--navy);
+    border-radius: 12px;
+    padding: 20px 22px;
+    color: white;
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    margin-bottom: 10px;
+    color: #94a3b8;
+  }
+  .summary-row span:last-child { font-weight: 500; color: white; }
+
+  .ppn-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+    font-size: 12px;
+    color: #94a3b8;
+  }
+
+  .toggle-ppn {
+    width: 34px; height: 18px;
+    background: #2d3f5a;
+    border-radius: 9px;
+    position: relative;
+    cursor: pointer;
+    border: none;
+    transition: background .2s;
+    flex-shrink: 0;
+  }
+  .toggle-ppn.on { background: var(--blue-accent); }
+  .toggle-ppn::after {
+    content: '';
+    position: absolute;
+    width: 12px; height: 12px;
+    background: white;
+    border-radius: 50%;
+    top: 3px; left: 3px;
+    transition: left .2s;
+  }
+  .toggle-ppn.on::after { left: 19px; }
+
+  .total-divider { height: 1px; background: #2d3f5a; margin: 12px 0; }
+
+  .total-label { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 4px; }
+  .total-amount {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: -.5px;
+  }
+
+  .pay-btn {
+    margin-top: 14px;
+    width: 100%;
+    padding: 10px;
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    border-radius: 8px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: .15s;
+  }
+  .pay-btn:hover { background: var(--gold-light); }
+
+  /* Signatures */
+  .signatures {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0 40px 32px;
+    gap: 20px;
+  }
+  .sig-col { text-align: center; }
+  .sig-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 40px;
+  }
+  .sig-name {
+    display: inline-block;
+    border-top: 2px solid var(--border);
+    padding-top: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    min-width: 120px;
+  }
+  .sig-name.bold { border-top-color: var(--navy); color: var(--navy); font-weight: 700; }
+
+  /* Footer */
+  .invoice-footer {
+    background: var(--bg-light);
+    border-top: 1px solid var(--border);
+    padding: 12px 40px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* Print mode */
+  @media print {
+    body { background: white; padding: 0; }
+    .toolbar { display: none; }
+    .invoice-wrap { box-shadow: none; border-radius: 0; }
+    .add-item-btn { display: none; }
+    .delete-btn { display: none; }
+    .pay-btn { display: none; }
+    .td-input { border: none !important; background: transparent !important; padding: 0; }
+    .input-field { border: none; background: transparent; padding: 0; }
+    textarea.input-field { resize: none; }
+  }
+
+  /* Status selector popup */
+  .status-popup {
+    position: absolute;
+    background: white;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.12);
+    padding: 6px;
+    z-index: 100;
+    min-width: 160px;
+    display: none;
+  }
+  .status-popup.show { display: block; }
+  .status-option {
+    padding: 8px 12px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 2px;
+    transition: .1s;
+  }
+  .status-option:hover { background: var(--bg-light); }
+
+  .status-wrap { position: relative; display: inline-block; }
+</style>
+</head>
+<body>
+
+<!-- Toolbar -->
+<div class="toolbar">
+  <button class="btn btn-outline" onclick="resetInvoice()">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+    Reset
+  </button>
+  <button class="btn btn-primary" onclick="exportPDF()">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    Export PDF
+  </button>
+</div>
+
+<!-- Invoice -->
+<div class="invoice-wrap" id="invoice">
+  <div class="top-stripe"></div>
+
+  <!-- Header -->
+  <div class="invoice-header">
+    <div>
+      <div class="logo-area">
+        <div class="logo-box">D</div>
+        <div class="logo-text">
+          <h1>DotCom <span>Partner</span></h1>
+          <p>Digital Solutions</p>
+        </div>
+      </div>
+    </div>
+    <div class="invoice-title">
+      <h2>Invoice</h2>
+    </div>
+  </div>
+
+  <!-- Contact -->
+  <div class="contact-bar">
+    <div class="contact-item">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span id="ci-address" contenteditable="true">Pematangsiantar, Sumatera Utara</span>
+    </div>
+    <div class="contact-item">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+      <span id="ci-email" contenteditable="true">dotcom.partner@gmail.com</span>
+    </div>
+    <div class="contact-item">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.79a16 16 0 0 0 6.29 6.29l.95-.94a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      <span id="ci-phone" contenteditable="true">+62 812-6521-4040</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Meta -->
+  <div class="meta-row">
+    <table class="meta-table">
+      <tr>
+        <td>No. Invoice</td>
+        <td class="inv-no">
+          <span contenteditable="true" id="inv-no">INV-20260331-3610</span>
+        </td>
+      </tr>
+      <tr>
+        <td>Tanggal</td>
+        <td><input type="date" id="inv-date" class="input-field" style="width:auto;padding:4px 8px;font-size:13px;background:transparent;border-color:transparent;" value="2026-03-31"></td>
+      </tr>
+      <tr>
+        <td>Jatuh Tempo</td>
+        <td class="due-date"><input type="date" id="inv-due" class="input-field" style="width:auto;padding:4px 8px;font-size:13px;background:transparent;border-color:transparent;color:var(--gold);font-weight:700;" value="2026-04-07"></td>
+      </tr>
+      <tr>
+        <td>Status</td>
+        <td>
+          <div class="status-wrap">
+            <span class="status-badge status-menunggu" id="status-badge" onclick="toggleStatusMenu()">
+              <span class="status-dot"></span>
+              <span id="status-text">MENUNGGU PEMBAYARAN</span>
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </span>
+            <div class="status-popup" id="status-popup">
+              <div class="status-option" onclick="setStatus('menunggu')">⏳ Menunggu Pembayaran</div>
+              <div class="status-option" onclick="setStatus('lunas')">✅ Lunas</div>
+              <div class="status-option" onclick="setStatus('dibatalkan')">❌ Dibatalkan</div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Client + Payment -->
+  <div class="two-col">
+    <div>
+      <div class="section-label">Ditujukan Untuk:</div>
+      <input type="text" class="input-field" id="client-name" placeholder="Nama Perusahaan / Klien">
+      <input type="text" class="input-field" id="client-wa" placeholder="Nomor WhatsApp">
+      <textarea class="input-field" id="client-address" placeholder="Alamat Lengkap" rows="3"></textarea>
+    </div>
+    <div>
+      <div class="section-label">Informasi Pembayaran:</div>
+      <div class="payment-box">
+        <div class="payment-edit">
+          <input type="text" class="input-field" id="bank-name" value="Bank Central Asia (BCA)" style="font-size:12px;color:var(--text-secondary);margin-bottom:4px;">
+          <input type="text" class="input-field" id="account-no" value="8201243165" style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:var(--blue-accent);letter-spacing:1px;background:transparent;border-color:transparent;">
+          <input type="text" class="input-field" id="account-name" value="A.n. Eko Praptono" style="font-size:12px;color:var(--text-secondary);background:transparent;border-color:transparent;">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Items Table -->
+  <div class="items-section">
+    <table class="items-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th style="text-align:left">Deskripsi Layanan</th>
+          <th>Qty</th>
+          <th>Harga Unit</th>
+          <th>Subtotal</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="items-body">
+      </tbody>
+    </table>
+    <button class="add-item-btn" onclick="addItem()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Tambah Item Baru
+    </button>
+  </div>
+
+  <!-- Notes + Summary -->
+  <div class="bottom-section">
+    <div>
+      <div class="notes-label">Catatan Tambahan</div>
+      <textarea class="input-field" id="notes" rows="4" placeholder="Catatan atau syarat pembayaran...">Pembayaran maksimal dilakukan sesuai tanggal jatuh tempo yang tertera.</textarea>
+    </div>
+    <div class="summary-box">
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span id="summary-subtotal">Rp 0</span>
+      </div>
+      <div class="ppn-row">
+        <button class="toggle-ppn" id="ppn-toggle" onclick="togglePPN()"></button>
+        <span>Aktifkan PPN (11%)</span>
+      </div>
+      <div class="summary-row" id="ppn-row" style="display:none;">
+        <span>PPN 11%</span>
+        <span id="summary-ppn">Rp 0</span>
+      </div>
+      <div class="total-divider"></div>
+      <div class="total-label">Total Tagihan</div>
+      <div class="total-amount" id="summary-total">Rp 0</div>
+      <button class="pay-btn" onclick="cycleStatus()">MENUNGGU PEMBAYARAN</button>
+    </div>
+  </div>
+
+  <!-- Signatures -->
+  <div class="signatures">
+    <div class="sig-col">
+      <div class="sig-label">Penerima</div>
+      <div class="sig-name"><span contenteditable="true">Pihak Klien</span></div>
+    </div>
+    <div class="sig-col">
+      <div class="sig-label">Hormat Kami</div>
+      <div class="sig-name bold"><span contenteditable="true">DotCom Partner</span></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="invoice-footer">
+    <span>Generated by DotCom Partner System</span>
+    <span>© 2026 DotCom Solutions</span>
+  </div>
+</div>
+
+<script>
+let ppnActive = false;
+let items = [{ desc: 'Contoh Produk', qty: 1, price: 50000 }];
+
+function formatRp(n) {
+  return 'Rp ' + parseInt(n||0).toLocaleString('id-ID');
+}
+
+function parseNum(s) {
+  return parseFloat((s||'').replace(/[^\d.]/g,'')) || 0;
+}
+
+function renderItems() {
+  const tbody = document.getElementById('items-body');
+  tbody.innerHTML = '';
+  items.forEach((item, i) => {
+    const sub = (item.qty||0) * (item.price||0);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${i+1}</td>
+      <td><input class="td-input" value="${item.desc||''}" oninput="items[${i}].desc=this.value" placeholder="Deskripsi layanan..."></td>
+      <td><input class="td-input right" type="number" value="${item.qty||1}" min="1" oninput="items[${i}].qty=parseFloat(this.value)||0;updateCalc()" style="width:60px;"></td>
+      <td><input class="td-input right" value="${item.price||0}" oninput="items[${i}].price=parseNum(this.value);updateCalc()" style="width:100px;"></td>
+      <td class="subtotal-cell">${formatRp(sub)}</td>
+      <td><button class="delete-btn" onclick="removeItem(${i})" title="Hapus">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+      </button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+  updateCalc();
+}
+
+function updateCalc() {
+  const subtotal = items.reduce((s,it) => s + (it.qty||0)*(it.price||0), 0);
+  const ppn = ppnActive ? subtotal * 0.11 : 0;
+  const total = subtotal + ppn;
+
+  document.getElementById('summary-subtotal').textContent = formatRp(subtotal);
+  document.getElementById('summary-ppn').textContent = formatRp(ppn);
+  document.getElementById('summary-total').textContent = formatRp(total);
+
+  // update subtotal cells
+  const cells = document.querySelectorAll('.subtotal-cell');
+  items.forEach((it, i) => {
+    if (cells[i]) cells[i].textContent = formatRp((it.qty||0)*(it.price||0));
+  });
+}
+
+function addItem() {
+  items.push({ desc: '', qty: 1, price: 0 });
+  renderItems();
+}
+
+function removeItem(i) {
+  if (items.length === 1) return alert('Minimal 1 item diperlukan.');
+  items.splice(i, 1);
+  renderItems();
+}
+
+function togglePPN() {
+  ppnActive = !ppnActive;
+  const btn = document.getElementById('ppn-toggle');
+  const row = document.getElementById('ppn-row');
+  btn.classList.toggle('on', ppnActive);
+  row.style.display = ppnActive ? 'flex' : 'none';
+  updateCalc();
+}
+
+// Status
+const statusConfig = {
+  menunggu: { label: 'MENUNGGU PEMBAYARAN', cls: 'status-menunggu' },
+  lunas:    { label: 'LUNAS', cls: 'status-lunas' },
+  dibatalkan: { label: 'DIBATALKAN', cls: 'status-dibatalkan' }
+};
+
+let currentStatus = 'menunggu';
+
+function toggleStatusMenu() {
+  document.getElementById('status-popup').classList.toggle('show');
+}
+
+function setStatus(s) {
+  currentStatus = s;
+  const badge = document.getElementById('status-badge');
+  badge.className = 'status-badge ' + statusConfig[s].cls;
+  document.getElementById('status-text').textContent = statusConfig[s].label;
+  document.getElementById('status-popup').classList.remove('show');
+
+  const payBtn = document.querySelector('.pay-btn');
+  payBtn.textContent = statusConfig[s].label;
+  payBtn.style.background = s === 'lunas' ? 'var(--success)' : s === 'dibatalkan' ? 'var(--danger)' : 'var(--gold)';
+  payBtn.style.color = s === 'menunggu' ? 'var(--navy)' : 'white';
+}
+
+function cycleStatus() {
+  const order = ['menunggu','lunas','dibatalkan'];
+  const next = order[(order.indexOf(currentStatus)+1) % order.length];
+  setStatus(next);
+}
+
+document.addEventListener('click', e => {
+  const popup = document.getElementById('status-popup');
+  if (!e.target.closest('.status-wrap')) popup.classList.remove('show');
+});
+
+function resetInvoice() {
+  if (!confirm('Reset semua data invoice?')) return;
+  document.getElementById('client-name').value = '';
+  document.getElementById('client-wa').value = '';
+  document.getElementById('client-address').value = '';
+  document.getElementById('notes').value = 'Pembayaran maksimal dilakukan sesuai tanggal jatuh tempo yang tertera.';
+  items = [{ desc: 'Contoh Produk', qty: 1, price: 50000 }];
+  setStatus('menunggu');
+  renderItems();
+}
+
+function exportPDF() {
+  const el = document.getElementById('invoice');
+  const invNo = document.getElementById('inv-no').textContent.trim() || 'invoice';
+  const opt = {
+    margin: 0,
+    filename: invNo + '.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true, logging: false },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+
+  // Hide toolbar temporarily
+  document.querySelector('.toolbar').style.display = 'none';
+  document.querySelectorAll('.add-item-btn, .delete-btn, .pay-btn').forEach(el => el.style.visibility = 'hidden');
+
+  html2pdf().set(opt).from(el).save().then(() => {
+    document.querySelector('.toolbar').style.display = '';
+    document.querySelectorAll('.add-item-btn, .delete-btn, .pay-btn').forEach(el => el.style.visibility = '');
+  });
+}
+
+// Init
+renderItems();
+</script>
+</body>
+</html>
