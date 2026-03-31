@@ -8,17 +8,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
-            --primary: #1e40af;
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
             --primary-light: #eff6ff;
             --accent: #f59e0b;
             --navy: #0f172a;
-            --text-main: #1e293b;
-            --text-light: #64748b;
-            --border: #e2e8f0;
+            --text-main: #334155;
+            --text-dark: #0f172a;
+            --text-light: #94a3b8;
+            --border: #f1f5f9;
             --success: #10b981;
-            --danger: #ef4444;
+            --danger: #f43f5e;
             --white: #ffffff;
-            --bg-body: #f1f5f9;
+            --bg-body: #f8fafc;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -27,363 +29,271 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg-body);
             color: var(--text-main);
-            line-height: 1.5;
-            padding: 40px 20px;
+            padding: 50px 20px;
         }
 
         /* --- Toolbar --- */
         .toolbar {
-            max-width: 850px;
-            margin: 0 auto 24px;
+            max-width: 900px;
+            margin: 0 auto 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .btn-group { display: flex; gap: 12px; }
+        .btn-group { display: flex; gap: 15px; }
 
         .btn {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            border-radius: 10px;
+            gap: 10px;
+            padding: 12px 24px;
+            border-radius: 12px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s ease;
-            border: 1px solid transparent;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1.5px solid transparent;
         }
 
         .btn-primary {
-            background: var(--primary);
+            background: var(--navy);
             color: white;
-            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.2);
+            box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.2);
         }
-        .btn-primary:hover { background: #1e3a8a; transform: translateY(-1px); }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
 
         .btn-secondary {
             background: white;
-            color: var(--text-main);
-            border-color: var(--border);
+            color: var(--navy);
+            border-color: var(--navy);
         }
-        .btn-secondary:hover { background: var(--primary-light); border-color: var(--primary); }
+        .btn-secondary:hover { background: var(--navy); color: white; }
 
         /* --- Invoice Container --- */
         .invoice-card {
-            max-width: 850px;
+            max-width: 900px;
             margin: 0 auto;
             background: white;
-            border-radius: 24px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+            border-radius: 32px;
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.08);
             position: relative;
             overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.02);
         }
 
-        /* Dekorasi Header */
-        .header-accent {
-            height: 8px;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-        }
-
-        .invoice-content { padding: 50px; }
+        .invoice-content { padding: 60px; }
 
         /* --- Brand Header --- */
         .brand-section {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 40px;
-        }
-
-        .logo-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .logo-icon {
-            width: 50px; height: 50px;
-            background: var(--navy);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: 800;
-            color: white;
+            margin-bottom: 60px;
         }
 
         .brand-info h1 {
-            font-size: 22px;
+            font-size: 26px;
             font-weight: 800;
             color: var(--navy);
+            letter-spacing: -0.5px;
         }
         .brand-info h1 span { color: var(--primary); }
         .brand-info p {
-            font-size: 11px;
+            font-size: 12px;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             color: var(--text-light);
-            margin-top: 2px;
+            margin-top: 4px;
+            font-weight: 600;
         }
 
-        .invoice-label {
-            text-align: right;
-        }
-        .invoice-label h2 {
+        .invoice-label-wrap { text-align: right; }
+        .invoice-label-wrap h2 {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 42px;
+            font-size: 56px;
             font-weight: 700;
             color: #f1f5f9;
-            line-height: 1;
-            margin-bottom: 5px;
+            line-height: 0.8;
+            margin-bottom: 10px;
             text-transform: uppercase;
-        }
-
-        /* --- Contact Info --- */
-        .info-grid {
-            display: grid;
-            grid-template-columns: 2fr 1.5fr;
-            gap: 40px;
-            padding-top: 30px;
-            border-top: 1px solid var(--border);
-            margin-bottom: 40px;
-        }
-
-        .contact-details {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 13px;
-            color: var(--text-main);
-        }
-        .contact-item svg { color: var(--primary); width: 16px; }
-
-        .meta-table { width: 100%; border-collapse: collapse; }
-        .meta-table td { padding: 4px 0; font-size: 14px; }
-        .meta-table td:first-child { color: var(--text-light); width: 120px; }
-        .meta-table td:last-child { font-weight: 600; text-align: right; }
-
-        /* --- Client & Payment Section --- */
-        .billing-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-
-        .section-title {
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--primary);
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        .input-group { margin-bottom: 10px; }
-        .form-control {
-            width: 100%;
-            padding: 10px 14px;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            font-family: inherit;
-            font-size: 13px;
-            background: #f8fafc;
-            transition: all 0.2s;
-        }
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: white;
-            box-shadow: 0 0 0 4px var(--primary-light);
-        }
-
-        .payment-card {
-            background: var(--navy);
-            color: white;
-            padding: 20px;
-            border-radius: 18px;
-            position: relative;
-            overflow: hidden;
-        }
-        .payment-card::after {
-            content: '';
-            position: absolute;
-            top: -20px; right: -20px;
-            width: 100px; height: 100px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 50%;
-        }
-
-        .bank-label { font-size: 11px; opacity: 0.7; text-transform: uppercase; margin-bottom: 4px; }
-        .bank-acc { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; margin: 4px 0; letter-spacing: 1px; }
-        .bank-owner { font-size: 13px; font-weight: 500; }
-
-        /* --- Items Table --- */
-        .items-container { margin-bottom: 40px; }
-        .table-main {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 8px;
-        }
-
-        .table-main th {
-            padding: 12px 15px;
-            text-align: left;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-light);
-            border-bottom: 2px solid var(--border);
-        }
-
-        .table-main tr.item-row td {
-            background: #f8fafc;
-            padding: 15px;
-            font-size: 14px;
-        }
-
-        .table-main tr.item-row td:first-child { border-radius: 12px 0 0 12px; }
-        .table-main tr.item-row td:last-child { border-radius: 0 12px 12px 0; }
-
-        .table-input {
-            background: transparent;
-            border: 1px solid transparent;
-            padding: 5px;
-            width: 100%;
-            font-family: inherit;
-            font-size: inherit;
-            border-radius: 4px;
-        }
-        .table-input:focus { background: white; border-color: var(--primary); outline: none; }
-
-        .btn-add {
-            margin-top: 15px;
-            background: none;
-            border: 2px dashed var(--border);
-            width: 100%;
-            padding: 12px;
-            border-radius: 12px;
-            color: var(--text-light);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn-add:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
-
-        /* --- Summary Section --- */
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 1.5fr 1fr;
-            gap: 40px;
-            align-items: flex-start;
-        }
-
-        .summary-card {
-            background: #f8fafc;
-            padding: 25px;
-            border-radius: 20px;
-        }
-
-        .summary-line {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            font-size: 14px;
-        }
-
-        .summary-line.total {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 2px solid var(--border);
-            font-weight: 800;
-            font-size: 24px;
-            color: var(--navy);
-        }
-
-        .toggle-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .toggle-switch {
-            width: 36px; height: 20px;
-            background: #cbd5e1;
-            border-radius: 10px;
-            position: relative;
-            transition: 0.3s;
-        }
-        .toggle-switch::after {
-            content: '';
-            position: absolute;
-            width: 14px; height: 14px;
-            background: white;
-            border-radius: 50%;
-            top: 3px; left: 3px;
-            transition: 0.3s;
-        }
-        .toggle-container.active .toggle-switch { background: var(--primary); }
-        .toggle-container.active .toggle-switch::after { left: 19px; }
-
-        /* --- Signature --- */
-        .signature-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 50px;
-            margin-top: 50px;
-            text-align: center;
-        }
-
-        .sig-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .sig-space { height: 80px; }
-        .sig-name {
-            font-weight: 700;
-            border-top: 1px solid var(--text-main);
-            padding-top: 8px;
-            width: 180px;
         }
 
         /* --- Status Badge --- */
         .status-badge {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 700;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 800;
             cursor: pointer;
-            transition: 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
         }
-        .status-waiting { background: #fef3c7; color: #d97706; }
-        .status-paid { background: #dcfce7; color: #16a34a; }
-        .status-cancelled { background: #fee2e2; color: #dc2626; }
+        .status-waiting { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+        .status-paid { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+        .status-cancelled { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
 
-        /* Print Override */
+        /* --- Info Grid --- */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .contact-details {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 14px;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+        .contact-item svg { color: var(--primary); width: 18px; margin-top: 2px; }
+
+        .meta-box {
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .meta-item label { font-size: 11px; font-weight: 700; color: var(--text-light); text-transform: uppercase; display: block; margin-bottom: 5px; }
+        .meta-item span, .meta-item input { font-size: 14px; font-weight: 700; color: var(--navy); }
+
+        /* --- Billing Section --- */
+        .billing-section {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1.5px solid var(--border);
+            border-radius: 16px;
+            font-family: inherit;
+            font-size: 14px;
+            background: #ffffff;
+            transition: all 0.3s;
+            margin-bottom: 12px;
+        }
+        .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-light); }
+
+        .payment-card {
+            background: linear-gradient(135deg, var(--navy), #1e293b);
+            color: white;
+            padding: 30px;
+            border-radius: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .bank-label { font-size: 10px; opacity: 0.6; text-transform: uppercase; font-weight: 700; margin-bottom: 10px; }
+        .bank-acc { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; margin-bottom: 15px; letter-spacing: 1.5px; border:none; background:none; color:white; width: 100%; }
+        .bank-owner { font-size: 14px; font-weight: 600; opacity: 0.9; }
+
+        /* --- Table Section --- */
+        .table-wrap { margin-bottom: 40px; }
+        .table-main { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
+        .table-main th { padding: 15px; text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-light); border-bottom: 2px solid var(--border); }
+        .item-row td { background: #fdfdfd; padding: 20px 15px; font-size: 14px; border-top: 1.5px solid var(--border); border-bottom: 1.5px solid var(--border); transition: 0.2s; }
+        .item-row td:first-child { border-left: 1.5px solid var(--border); border-radius: 16px 0 0 16px; }
+        .item-row td:last-child { border-right: 1.5px solid var(--border); border-radius: 0 16px 16px 0; }
+        .item-row:hover td { background: var(--primary-light); border-color: var(--primary-light); }
+
+        .table-input { background: transparent; border: none; font-family: inherit; font-size: inherit; font-weight: 600; width: 100%; color: var(--navy); }
+        .table-input:focus { outline: none; }
+
+        .btn-add {
+            width: 100%;
+            padding: 16px;
+            border-radius: 16px;
+            border: 2px dashed var(--text-light);
+            background: none;
+            color: var(--text-light);
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-add:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+
+        /* --- Footer Summary --- */
+        .summary-container {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 60px;
+            align-items: flex-start;
+        }
+
+        .total-card {
+            background: var(--navy);
+            color: white;
+            padding: 40px;
+            border-radius: 28px;
+            text-align: right;
+        }
+        .total-label { font-size: 12px; text-transform: uppercase; letter-spacing: 3px; opacity: 0.6; margin-bottom: 10px; }
+        .total-value { font-family: 'Space Grotesk', sans-serif; font-size: 42px; font-weight: 700; margin-bottom: 30px; }
+        
+        .subtotal-lines { display: flex; flex-direction: column; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; margin-bottom: 20px; }
+        .sub-line { display: flex; justify-content: space-between; font-size: 14px; font-weight: 500; opacity: 0.8; }
+
+        .toggle-ppn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+        .switch { width: 44px; height: 24px; background: #e2e8f0; border-radius: 100px; position: relative; transition: 0.3s; }
+        .switch::after { content: ''; position: absolute; width: 18px; height: 18px; background: white; border-radius: 50%; top: 3px; left: 3px; transition: 0.3s; }
+        .active .switch { background: var(--primary); }
+        .active .switch::after { left: 23px; }
+
+        /* --- Signatures --- */
+        .signature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 100px;
+            margin-top: 80px;
+            text-align: center;
+        }
+        .sig-line { height: 1px; background: var(--navy); margin-top: 100px; margin-bottom: 10px; opacity: 0.2; }
+        .sig-name { font-weight: 800; color: var(--navy); font-size: 15px; }
+
+        /* --- Responsive & Print --- */
         @media print {
-            body { background: white; padding: 0; }
+            body { padding: 0; background: white; }
             .toolbar, .btn-add, .delete-btn { display: none !important; }
-            .invoice-card { box-shadow: none; border-radius: 0; }
-            .form-control { background: none; border: none; padding: 0; }
-            .table-main tr.item-row td { background: none; border-bottom: 1px solid var(--border); }
+            .invoice-card { box-shadow: none; border: none; border-radius: 0; }
+            .form-control, .table-input { border: none !important; background: none !important; padding: 0 !important; }
+            .payment-card { background: #f1f5f9 !important; color: black !important; }
+            .total-card { background: #f1f5f9 !important; color: black !important; }
         }
     </style>
 </head>
@@ -395,145 +305,142 @@
     </div>
     <div class="btn-group">
         <button class="btn btn-secondary" onclick="resetInvoice()">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-            Reset
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            Reset Data
         </button>
         <button class="btn btn-primary" onclick="exportPDF()">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Download PDF
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Simpan PDF
         </button>
     </div>
 </div>
 
 <div class="invoice-card" id="invoice-area">
-    <div class="header-accent"></div>
     <div class="invoice-content">
         
         <header class="brand-section">
-            <div class="logo-wrapper">
-                <div class="logo-icon">D</div>
-                <div class="brand-info">
-                    <h1>DotCom <span>Partner</span></h1>
-                    <p>Premium Digital Solutions</p>
-                </div>
+            <div class="brand-info">
+                <h1>DotCom <span>Partner</span></h1>
+                <p>Digital Creative Agency</p>
             </div>
-            <div class="invoice-label">
+            <div class="invoice-label-wrap">
                 <h2>Invoice</h2>
                 <div class="status-badge status-waiting" id="status-toggle" onclick="cycleStatus()">
-                    <span id="status-text">MENUNGGU PEMBAYARAN</span>
+                    <span id="status-text">Menunggu Pembayaran</span>
                 </div>
             </div>
         </header>
 
         <section class="info-grid">
             <div class="contact-details">
+                <span class="section-title">Informasi Pengirim</span>
                 <div class="contact-item">
-                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                    <span contenteditable="true">Pematangsiantar, Sumatera Utara</span>
+                    <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <span contenteditable="true">Jl. Merdeka No. 40, Pematangsiantar</span>
                 </div>
                 <div class="contact-item">
-                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+                    <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
                     <span contenteditable="true">dotcom.partner@gmail.com</span>
                 </div>
                 <div class="contact-item">
-                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.79a16 16 0 0 0 6.29 6.29l.95-.94a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                     <span contenteditable="true">+62 812-6521-4040</span>
                 </div>
             </div>
-            <div>
-                <table class="meta-table">
-                    <tr>
-                        <td>Nomor</td>
-                        <td contenteditable="true" style="color: var(--primary);">#INV/2026/001</td>
-                    </tr>
-                    <tr>
-                        <td>Tanggal</td>
-                        <td><input type="date" value="2026-03-31" class="table-input" style="text-align: right;"></td>
-                    </tr>
-                    <tr>
-                        <td>Jatuh Tempo</td>
-                        <td><input type="date" value="2026-04-07" class="table-input" style="text-align: right; color: var(--accent);"></td>
-                    </tr>
-                </table>
+            <div class="meta-box">
+                <div class="meta-item">
+                    <label>No. Tagihan</label>
+                    <span contenteditable="true">INV/2026/0331</span>
+                </div>
+                <div class="meta-item">
+                    <label>Metode</label>
+                    <span contenteditable="true">Transfer Bank</span>
+                </div>
+                <div class="meta-item">
+                    <label>Tgl. Terbit</label>
+                    <input type="date" value="2026-03-31" class="table-input">
+                </div>
+                <div class="meta-item">
+                    <label>Jatuh Tempo</label>
+                    <input type="date" value="2026-04-07" class="table-input" style="color: var(--accent);">
+                </div>
             </div>
         </section>
 
-        <section class="billing-grid">
+        <section class="billing-section">
             <div>
-                <span class="section-title">Ditujukan Untuk</span>
-                <div class="input-group">
-                    <input type="text" class="form-control" id="c-name" placeholder="Nama Klien / Perusahaan">
-                </div>
-                <div class="input-group">
-                    <input type="text" class="form-control" id="c-phone" placeholder="Nomor WhatsApp">
-                </div>
-                <textarea class="form-control" id="c-addr" rows="2" placeholder="Alamat Lengkap"></textarea>
+                <span class="section-title">Ditujukan Kepada</span>
+                <input type="text" class="form-control" id="c-name" placeholder="Nama Klien atau Perusahaan" style="font-weight: 700; font-size: 16px;">
+                <input type="text" class="form-control" id="c-phone" placeholder="Nomor Kontak / WhatsApp">
+                <textarea class="form-control" id="c-addr" rows="2" placeholder="Alamat lengkap tujuan pengiriman tagihan"></textarea>
             </div>
             <div>
-                <span class="section-title">Metode Pembayaran</span>
+                <span class="section-title">Rekening Pembayaran</span>
                 <div class="payment-card">
-                    <div class="bank-label">Transfer Bank</div>
-                    <input type="text" class="table-input bank-acc" value="8201243165" style="color:white; padding:0;">
-                    <div class="bank-owner" contenteditable="true">BCA a.n Eko Praptono</div>
+                    <div class="bank-label">Bank Central Asia (BCA)</div>
+                    <input type="text" class="bank-acc" value="820 124 3165">
+                    <div class="bank-owner" contenteditable="true">A.n Eko Praptono</div>
                 </div>
             </div>
         </section>
 
-        <section class="items-container">
+        <section class="table-wrap">
             <table class="table-main">
                 <thead>
                     <tr>
-                        <th style="width: 50%;">Layanan / Produk</th>
-                        <th style="text-align: center;">Qty</th>
-                        <th style="text-align: right;">Harga</th>
-                        <th style="text-align: right;">Total</th>
-                        <th class="delete-btn" style="width: 40px;"></th>
+                        <th style="width: 50%;">Deskripsi Layanan</th>
+                        <th style="text-align: center; width: 10%;">Qty</th>
+                        <th style="text-align: right; width: 20%;">Harga Satuan</th>
+                        <th style="text-align: right; width: 20%;">Total</th>
+                        <th class="delete-btn" style="width: 50px;"></th>
                     </tr>
                 </thead>
                 <tbody id="items-body">
-                    <!-- Items injected here -->
+                    <!-- Items dynamic -->
                 </tbody>
             </table>
             <button class="btn-add" onclick="addItem()">
-                + Tambah Baris Baru
+                + Tambah Baris Pekerjaan Baru
             </button>
         </section>
 
-        <section class="footer-grid">
+        <section class="summary-container">
             <div>
-                <span class="section-title">Catatan Tambahan</span>
-                <textarea class="form-control" rows="4">Terima kasih atas kepercayaan Anda. Pembayaran harap dilakukan tepat waktu sebelum jatuh tempo.</textarea>
+                <span class="section-title">Catatan & Ketentuan</span>
+                <textarea class="form-control" rows="5">1. Pembayaran dianggap sah jika dana sudah masuk ke rekening di atas.
+2. Harap lampirkan bukti transfer via WhatsApp.</textarea>
+                
+                <div class="toggle-ppn" id="ppn-trigger" onclick="togglePPN()">
+                    <div class="switch"></div>
+                    <span>Sertakan Pajak PPN (11%)</span>
+                </div>
             </div>
-            <div class="summary-card">
-                <div class="summary-line">
-                    <span>Subtotal</span>
-                    <span id="subtotal-val">Rp 0</span>
+            <div class="total-card">
+                <div class="subtotal-lines">
+                    <div class="sub-line">
+                        <span>Subtotal</span>
+                        <span id="subtotal-val">Rp 0</span>
+                    </div>
+                    <div class="sub-line" id="ppn-display" style="display: none; color: var(--accent);">
+                        <span>PPN (11%)</span>
+                        <span id="ppn-val">Rp 0</span>
+                    </div>
                 </div>
-                <div class="toggle-container" id="ppn-trigger" onclick="togglePPN()">
-                    <div class="toggle-switch"></div>
-                    <span>PPN (11%)</span>
-                </div>
-                <div class="summary-line" id="ppn-display" style="display: none;">
-                    <span>Pajak (11%)</span>
-                    <span id="ppn-val">Rp 0</span>
-                </div>
-                <div class="summary-line total">
-                    <span>TOTAL</span>
-                    <span id="total-val">Rp 0</span>
-                </div>
+                <div class="total-label">Total Tagihan</div>
+                <div class="total-value" id="total-val">Rp 0</div>
             </div>
         </section>
 
-        <section class="signature-section">
-            <div class="sig-box">
+        <section class="signature-grid">
+            <div>
                 <span class="section-title">Penerima</span>
-                <div class="sig-space"></div>
+                <div class="sig-line"></div>
                 <div class="sig-name" contenteditable="true">Pihak Klien</div>
             </div>
-            <div class="sig-box">
-                <span class="section-title">Hormat Kami</span>
-                <div class="sig-space"></div>
-                <div class="sig-name">DotCom Partner</div>
+            <div>
+                <span class="section-title">DotCom Partner</span>
+                <div class="sig-line"></div>
+                <div class="sig-name">Eko Praptono</div>
             </div>
         </section>
 
@@ -541,9 +448,9 @@
 </div>
 
 <script>
-    let items = [{ desc: 'Website Development UI/UX', qty: 1, price: 2500000 }];
+    let items = [{ desc: 'Pembuatan Website Profile Perusahaan', qty: 1, price: 3500000 }];
     let isPPN = false;
-    let status = 'waiting';
+    let currentStatus = 'waiting';
 
     function formatCurrency(val) {
         return 'Rp ' + parseInt(val).toLocaleString('id-ID');
@@ -562,13 +469,13 @@
             const tr = document.createElement('tr');
             tr.className = 'item-row';
             tr.innerHTML = `
-                <td><input type="text" class="table-input" value="${item.desc}" oninput="updateItem(${idx}, 'desc', this.value)"></td>
-                <td><input type="number" class="table-input" style="text-align:center" value="${item.qty}" oninput="updateItem(${idx}, 'qty', this.value)"></td>
+                <td><input type="text" class="table-input" value="${item.desc}" placeholder="Nama pekerjaan..." oninput="updateItem(${idx}, 'desc', this.value)"></td>
+                <td><input type="number" class="table-input" style="text-align:center" value="${item.qty}" min="1" oninput="updateItem(${idx}, 'qty', this.value)"></td>
                 <td><input type="number" class="table-input" style="text-align:right" value="${item.price}" oninput="updateItem(${idx}, 'price', this.value)"></td>
-                <td style="text-align:right; font-weight:600">${formatCurrency(total)}</td>
-                <td class="delete-btn">
-                    <button onclick="removeItem(${idx})" style="background:none; border:none; color:var(--danger); cursor:pointer;">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18m-2 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                <td style="text-align:right; font-weight:800; color:var(--navy)">${formatCurrency(total)}</td>
+                <td class="delete-btn" style="text-align:center">
+                    <button onclick="removeItem(${idx})" style="background:none; border:none; color:var(--danger); cursor:pointer; opacity:0.5;">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                     </button>
                 </td>
             `;
@@ -611,23 +518,22 @@
         const badge = document.getElementById('status-toggle');
         const text = document.getElementById('status-text');
         
-        if (status === 'waiting') {
-            status = 'paid';
-            text.innerText = 'LUNAS';
-            badge.className = 'status-badge status-paid';
-        } else if (status === 'paid') {
-            status = 'cancelled';
-            text.innerText = 'DIBATALKAN';
-            badge.className = 'status-badge status-cancelled';
-        } else {
-            status = 'waiting';
-            text.innerText = 'MENUNGGU PEMBAYARAN';
-            badge.className = 'status-badge status-waiting';
-        }
+        const configs = {
+            waiting: { label: 'Menunggu Pembayaran', class: 'status-badge status-waiting', next: 'paid' },
+            paid: { label: 'Lunas Terbayar', class: 'status-badge status-paid', next: 'cancelled' },
+            cancelled: { label: 'Tagihan Dibatalkan', class: 'status-badge status-cancelled', next: 'waiting' }
+        };
+
+        const current = configs[currentStatus];
+        currentStatus = current.next;
+        const next = configs[currentStatus];
+
+        text.innerText = next.label;
+        badge.className = next.class;
     }
 
     function resetInvoice() {
-        if(confirm('Yakin ingin menghapus semua data?')) {
+        if(confirm('Aksi ini akan menghapus semua inputan. Lanjutkan?')) {
             items = [{ desc: '', qty: 1, price: 0 }];
             document.querySelectorAll('.form-control').forEach(el => el.value = '');
             render();
@@ -638,15 +544,15 @@
         const element = document.getElementById('invoice-area');
         const options = {
             margin: 0,
-            filename: 'Invoice-DotCom.pdf',
+            filename: 'Invoice-DotCom-Partner.pdf',
             image: { type: 'jpeg', quality: 1 },
-            html2canvas: { scale: 3, useCORS: true },
+            html2canvas: { scale: 3, useCORS: true, letterRendering: true },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
         html2pdf().set(options).from(element).save();
     }
 
-    // Initialize
+    // Init
     render();
 </script>
 
