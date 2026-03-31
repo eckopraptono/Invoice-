@@ -239,10 +239,9 @@
 
         /* --- Footer Summary --- */
         .summary-container {
-            display: grid;
-            grid-template-columns: 1fr 260px;
+            display: flex;
+            flex-direction: column;
             gap: 16px;
-            align-items: flex-start;
             margin-bottom: 12px;
         }
 
@@ -289,9 +288,22 @@
 
         /* --- Print Optimization --- */
         @media print {
-            @page { margin: 0; size: A4; }
-            * { page-break-inside: avoid !important; }
-            body { padding: 0; background: white; width: 100%; height: 100%; margin: 0; }
+            @page { 
+                margin: 8mm;
+                size: A4; 
+            }
+            * { 
+                page-break-inside: avoid !important; 
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            body { 
+                padding: 0; 
+                background: white; 
+                width: 100%; 
+                margin: 0; 
+            }
             .toolbar, .btn-add, .delete-btn { display: none !important; }
             .invoice-card { 
                 box-shadow: none; 
@@ -301,23 +313,82 @@
                 max-width: 100%;
                 height: auto;
                 page-break-after: avoid;
+                margin: 0;
+                padding: 0;
             }
-            .invoice-content { padding: 18px 22px; }
-            .brand-section { margin-bottom: 12px; }
-            .info-grid { margin-bottom: 12px; }
-            .billing-section { margin-bottom: 12px; }
-            .form-control, .table-input { border: none !important; background: none !important; padding: 0 !important; }
-            .payment-card, .total-card { background: #f8fafc !important; color: black !important; border: 1.5px solid #e2e8f0; padding: 12px !important; }
-            .total-card { padding: 14px !important; }
-            .total-currency, .total-value { color: black !important; opacity: 1 !important; }
-            .total-value { font-size: 28px !important; }
-            textarea { resize: none; overflow: visible; height: auto !important; }
-            .signature-grid { margin-top: 10px; gap: 20px; }
-            .summary-container { margin-bottom: 8px; }
-            .table-main th { padding: 6px 8px !important; }
-            .item-row td { padding: 8px 8px !important; font-size: 10px !important; }
-            .meta-item { padding: 3px 0 !important; }
-            .meta-item label { font-size: 7px !important; margin-bottom: 1px !important; }
+            .invoice-content { 
+                padding: 12px 14px;
+                width: 100%;
+            }
+            .brand-section { margin-bottom: 10px; }
+            .info-grid { margin-bottom: 10px; }
+            .billing-section { margin-bottom: 10px; }
+            .table-wrap { margin-bottom: 10px; }
+            .form-control, .table-input { 
+                border: none !important; 
+                background: none !important; 
+                padding: 0 !important; 
+                margin: 0 !important;
+            }
+            .payment-card, .total-card { 
+                background: #f8fafc !important; 
+                color: black !important; 
+                border: 1.5px solid #e2e8f0; 
+                padding: 10px !important; 
+                margin: 0 !important;
+            }
+            .total-currency, .total-value { 
+                color: black !important; 
+                opacity: 1 !important; 
+            }
+            .total-value { font-size: 26px !important; }
+            textarea { 
+                resize: none; 
+                overflow: visible !important; 
+                height: auto !important; 
+                border: none !important;
+                background: none !important;
+                padding: 0 !important;
+            }
+            .signature-grid { 
+                margin-top: 8px; 
+                gap: 15px;
+            }
+            .summary-container { 
+                margin-bottom: 8px; 
+                display: flex !important;
+                flex-direction: column !important;
+            }
+            .total-card {
+                width: 100%;
+            }
+            .table-main th { 
+                padding: 4px 6px !important; 
+                font-size: 7px !important;
+            }
+            .item-row td { 
+                padding: 5px 6px !important; 
+                font-size: 9px !important; 
+                border-width: 0.5px !important;
+            }
+            .meta-item { 
+                padding: 2px 0 !important; 
+                margin: 0 !important;
+            }
+            .meta-item label { 
+                font-size: 6px !important; 
+                margin-bottom: 0px !important; 
+            }
+            .section-title {
+                font-size: 7px !important;
+                margin-bottom: 4px !important;
+            }
+            .contact-item {
+                font-size: 9px !important;
+            }
+            .brand-info h1 {
+                font-size: 18px !important;
+            }
         }
     </style>
 </head>
@@ -608,25 +679,41 @@
     function exportPDF() {
         const element = document.getElementById('invoice-area');
         const invoiceNum = document.getElementById('invoice-number').innerText;
+        
+        // A4 dimensions in mm: 210x297
         const options = {
-            margin: [0, 0, 0, 0],
+            margin: [8, 8, 8, 8],
             filename: `${invoiceNum}-Invoice.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { 
-                scale: 1.2,
+                scale: 2,
                 useCORS: true,
                 allowTaint: true,
                 scrollY: 0,
                 scrollX: 0,
-                windowWidth: 794,
-                backgroundColor: '#ffffff'
+                windowWidth: 850,
+                backgroundColor: '#ffffff',
+                logging: false,
+                onclone: function(clonedDocument) {
+                    clonedDocument.body.style.padding = '0';
+                    clonedDocument.body.style.margin = '0';
+                    const clonedInvoice = clonedDocument.getElementById('invoice-area');
+                    if (clonedInvoice) {
+                        clonedInvoice.style.width = '100%';
+                        clonedInvoice.style.maxWidth = '100%';
+                    }
+                }
             },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            jsPDF: { 
+                unit: 'mm', 
+                format: 'a4', 
+                orientation: 'portrait',
+                compress: true
+            },
             pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
         };
         
         // Prevent scroll and sidebar resize during PDF render
-        const originalWidth = window.innerWidth;
         document.body.style.overflow = 'hidden';
         window.scrollTo(0, 0);
         
