@@ -289,7 +289,7 @@
         /* --- Print Optimization --- */
         @media print {
             @page { 
-                margin: 8mm;
+                margin: 10mm 12mm;
                 size: A4; 
             }
             * { 
@@ -308,86 +308,161 @@
             .invoice-card { 
                 box-shadow: none; 
                 border: none; 
-                border-radius: 0; 
+                border-radius: 8px; 
                 width: 100%; 
                 max-width: 100%;
                 height: auto;
                 page-break-after: avoid;
                 margin: 0;
                 padding: 0;
+                background: white;
             }
             .invoice-content { 
-                padding: 12px 14px;
+                padding: 20px 22px;
                 width: 100%;
             }
-            .brand-section { margin-bottom: 10px; }
-            .info-grid { margin-bottom: 10px; }
-            .billing-section { margin-bottom: 10px; }
-            .table-wrap { margin-bottom: 10px; }
+            .brand-section { margin-bottom: 14px; }
+            .info-grid { margin-bottom: 14px; gap: 18px; }
+            .billing-section { margin-bottom: 14px; gap: 16px; }
+            .table-wrap { margin-bottom: 14px; }
             .form-control, .table-input { 
-                border: none !important; 
-                background: none !important; 
-                padding: 0 !important; 
+                border: 1px solid #d1d5db !important; 
+                background: #f9fafb !important; 
+                padding: 6px 8px !important; 
                 margin: 0 !important;
+                font-size: 10px !important;
+                font-family: inherit;
+            }
+            .form-control::-webkit-input-placeholder,
+            .table-input::-webkit-input-placeholder { 
+                color: #9ca3af !important; 
             }
             .payment-card, .total-card { 
-                background: #f8fafc !important; 
-                color: black !important; 
-                border: 1.5px solid #e2e8f0; 
-                padding: 10px !important; 
+                background: linear-gradient(135deg, #0f172a, #1e293b) !important; 
+                color: white !important; 
+                border: 1.5px solid #334155 !important; 
+                padding: 14px 16px !important; 
                 margin: 0 !important;
+                border-radius: 12px;
+            }
+            .bank-label, .bank-acc, .bank-owner { 
+                color: white !important; 
+            }
+            .bank-label { opacity: 0.7 !important; }
+            .bank-owner { opacity: 0.9 !important; }
+            .total-label { 
+                opacity: 0.7 !important;
             }
             .total-currency, .total-value { 
-                color: black !important; 
+                color: white !important; 
                 opacity: 1 !important; 
             }
-            .total-value { font-size: 26px !important; }
+            .total-value { font-size: 28px !important; }
+            .subtotal-lines { 
+                border-bottom: 1px solid rgba(255,255,255,0.1) !important; 
+                padding-bottom: 10px !important; 
+            }
+            .sub-line { 
+                opacity: 0.9 !important;
+            }
             textarea { 
                 resize: none; 
                 overflow: visible !important; 
                 height: auto !important; 
-                border: none !important;
-                background: none !important;
-                padding: 0 !important;
+                border: 1px solid #d1d5db !important;
+                background: #f9fafb !important;
+                padding: 6px 8px !important;
+                font-size: 10px !important;
+                font-family: inherit;
+                line-height: 1.4;
+            }
+            .desc-area {
+                min-height: auto !important;
             }
             .signature-grid { 
-                margin-top: 8px; 
-                gap: 15px;
+                margin-top: 16px; 
+                gap: 30px;
+            }
+            .sig-line {
+                margin-top: 20px !important;
+                margin-bottom: 6px !important;
             }
             .summary-container { 
-                margin-bottom: 8px; 
+                margin-bottom: 12px; 
                 display: flex !important;
                 flex-direction: column !important;
             }
             .total-card {
                 width: 100%;
             }
+            .table-main { 
+                border-spacing: 0 3px;
+            }
             .table-main th { 
-                padding: 4px 6px !important; 
-                font-size: 7px !important;
+                padding: 8px 10px !important; 
+                font-size: 9px !important;
+                font-weight: 700;
+                border-bottom: 2px solid #e5e7eb !important;
+                background: #f3f4f6 !important;
+                color: #6b7280 !important;
             }
             .item-row td { 
-                padding: 5px 6px !important; 
-                font-size: 9px !important; 
-                border-width: 0.5px !important;
+                padding: 8px 10px !important; 
+                font-size: 10px !important; 
+                border: 1px solid #e5e7eb !important;
+                background: #fafafa !important;
+            }
+            .item-row td:first-child { 
+                border-radius: 6px 0 0 6px !important; 
+            }
+            .item-row td:last-child { 
+                border-radius: 0 6px 6px 0 !important; 
+            }
+            .meta-box {
+                background: #f9fafb !important;
+                border: 1px solid #e5e7eb !important;
+                padding: 12px !important;
             }
             .meta-item { 
-                padding: 2px 0 !important; 
+                padding: 4px 0 !important; 
                 margin: 0 !important;
             }
             .meta-item label { 
-                font-size: 6px !important; 
-                margin-bottom: 0px !important; 
+                font-size: 8px !important; 
+                margin-bottom: 2px !important; 
+                font-weight: 700;
+            }
+            .meta-item span, .meta-item input { 
+                font-size: 10px !important;
+                font-weight: 600;
             }
             .section-title {
-                font-size: 7px !important;
-                margin-bottom: 4px !important;
+                font-size: 8px !important;
+                margin-bottom: 8px !important;
+                font-weight: 800;
             }
             .contact-item {
-                font-size: 9px !important;
+                font-size: 10px !important;
+            }
+            .contact-item svg { 
+                width: 14px !important;
             }
             .brand-info h1 {
-                font-size: 18px !important;
+                font-size: 20px !important;
+                font-weight: 800;
+            }
+            .brand-info p {
+                font-size: 10px !important;
+            }
+            .invoice-label-wrap h2 {
+                font-size: 32px !important;
+            }
+            .status-badge {
+                font-size: 8px !important;
+                padding: 6px 12px !important;
+            }
+            .toggle-ppn {
+                display: none !important;
             }
         }
     </style>
