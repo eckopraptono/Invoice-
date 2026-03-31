@@ -13,12 +13,11 @@
             --primary-light: #eff6ff;
             --accent: #f59e0b;
             --navy: #0f172a;
+            --navy-light: #1e293b;
             --text-main: #334155;
             --text-dark: #0f172a;
             --text-light: #94a3b8;
             --border: #f1f5f9;
-            --success: #10b981;
-            --danger: #f43f5e;
             --white: #ffffff;
             --bg-body: #f8fafc;
         }
@@ -52,14 +51,13 @@
             font-size: 14px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
             border: 1.5px solid transparent;
         }
 
         .btn-primary {
             background: var(--navy);
             color: white;
-            box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.2);
         }
         .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
 
@@ -131,7 +129,6 @@
             cursor: pointer;
             text-transform: uppercase;
             letter-spacing: 1px;
-            transition: 0.3s;
         }
         .status-waiting { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
         .status-paid { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
@@ -146,7 +143,7 @@
         }
 
         .section-title {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -165,7 +162,7 @@
             display: flex;
             align-items: flex-start;
             gap: 12px;
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-dark);
             font-weight: 500;
         }
@@ -179,14 +176,14 @@
             grid-template-columns: 1fr 1fr;
             gap: 20px;
         }
-        .meta-item label { font-size: 11px; font-weight: 700; color: var(--text-light); text-transform: uppercase; display: block; margin-bottom: 5px; }
-        .meta-item span, .meta-item input { font-size: 14px; font-weight: 700; color: var(--navy); }
+        .meta-item label { font-size: 10px; font-weight: 700; color: var(--text-light); text-transform: uppercase; display: block; margin-bottom: 5px; }
+        .meta-item span, .meta-item input { font-size: 13px; font-weight: 700; color: var(--navy); }
 
         /* --- Billing Section --- */
         .billing-section {
             display: grid;
             grid-template-columns: 1.2fr 0.8fr;
-            gap: 40px;
+            gap: 30px;
             margin-bottom: 60px;
         }
 
@@ -203,28 +200,33 @@
         }
         .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-light); }
 
+        /* HIARAKI: Payment Card lebih ramping */
         .payment-card {
-            background: linear-gradient(135deg, var(--navy), #1e293b);
+            background: linear-gradient(135deg, var(--navy), var(--navy-light));
             color: white;
-            padding: 30px;
+            padding: 24px;
             border-radius: 24px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            box-shadow: 0 10px 20px -5px rgba(15, 23, 42, 0.15);
         }
-        .bank-label { font-size: 10px; opacity: 0.6; text-transform: uppercase; font-weight: 700; margin-bottom: 10px; }
-        .bank-acc { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; margin-bottom: 15px; letter-spacing: 1.5px; border:none; background:none; color:white; width: 100%; }
-        .bank-owner { font-size: 14px; font-weight: 600; opacity: 0.9; }
+        .bank-label { font-size: 9px; opacity: 0.6; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; }
+        .bank-acc { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: 1.5px; border:none; background:none; color:white; width: 100%; margin: 8px 0; }
+        .bank-owner { font-size: 12px; font-weight: 600; opacity: 0.9; }
 
         /* --- Table Section --- */
         .table-wrap { margin-bottom: 40px; }
         .table-main { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
-        .table-main th { padding: 15px; text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-light); border-bottom: 2px solid var(--border); }
-        .item-row td { background: #fdfdfd; padding: 20px 15px; font-size: 14px; border-top: 1.5px solid var(--border); border-bottom: 1.5px solid var(--border); transition: 0.2s; }
+        .table-main th { padding: 15px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-light); border-bottom: 2px solid var(--border); }
+        .item-row td { background: #fdfdfd; padding: 20px 15px; font-size: 14px; border-top: 1.5px solid var(--border); border-bottom: 1.5px solid var(--border); vertical-align: middle; }
         .item-row td:first-child { border-left: 1.5px solid var(--border); border-radius: 16px 0 0 16px; }
         .item-row td:last-child { border-right: 1.5px solid var(--border); border-radius: 0 16px 16px 0; }
-        .item-row:hover td { background: var(--primary-light); border-color: var(--primary-light); }
 
         .table-input { background: transparent; border: none; font-family: inherit; font-size: inherit; font-weight: 600; width: 100%; color: var(--navy); }
         .table-input:focus { outline: none; }
+
+        .desc-area { min-height: 24px; resize: none; overflow: hidden; line-height: 1.4; display: block; }
 
         .btn-add {
             width: 100%;
@@ -234,7 +236,7 @@
             background: none;
             color: var(--text-light);
             font-weight: 700;
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
             transition: 0.3s;
         }
@@ -244,36 +246,41 @@
         .summary-container {
             display: grid;
             grid-template-columns: 1fr 350px;
-            gap: 60px;
+            gap: 40px;
             align-items: flex-start;
         }
 
+        /* HIRARKI: Total Card sebagai fokus utama */
         .total-card {
             background: var(--navy);
             color: white;
-            padding: 40px;
+            padding: 35px;
             border-radius: 28px;
             text-align: right;
+            box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.3);
         }
-        .total-label { font-size: 12px; text-transform: uppercase; letter-spacing: 3px; opacity: 0.6; margin-bottom: 10px; }
-        .total-value { font-family: 'Space Grotesk', sans-serif; font-size: 42px; font-weight: 700; margin-bottom: 30px; }
+        .total-label { font-size: 10px; text-transform: uppercase; letter-spacing: 3px; opacity: 0.6; margin-bottom: 15px; display: block; }
+        .total-value-wrap { display: flex; justify-content: flex-end; align-items: baseline; gap: 8px; }
+        .total-currency { font-size: 20px; font-weight: 600; opacity: 0.6; font-family: 'Space Grotesk', sans-serif; }
+        .total-value { font-family: 'Space Grotesk', sans-serif; font-size: 44px; font-weight: 700; margin-bottom: 25px; line-height: 1; }
         
-        .subtotal-lines { display: flex; flex-direction: column; gap: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; margin-bottom: 20px; }
-        .sub-line { display: flex; justify-content: space-between; font-size: 14px; font-weight: 500; opacity: 0.8; }
+        .subtotal-lines { display: flex; flex-direction: column; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; margin-bottom: 20px; }
+        .sub-line { display: flex; justify-content: space-between; font-size: 13px; font-weight: 500; opacity: 0.8; }
 
         .toggle-ppn {
             display: flex;
             align-items: center;
             gap: 12px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             color: var(--text-light);
+            margin-top: 15px;
         }
-        .switch { width: 44px; height: 24px; background: #e2e8f0; border-radius: 100px; position: relative; transition: 0.3s; }
-        .switch::after { content: ''; position: absolute; width: 18px; height: 18px; background: white; border-radius: 50%; top: 3px; left: 3px; transition: 0.3s; }
+        .switch { width: 40px; height: 22px; background: #e2e8f0; border-radius: 100px; position: relative; transition: 0.3s; }
+        .switch::after { content: ''; position: absolute; width: 16px; height: 16px; background: white; border-radius: 50%; top: 3px; left: 3px; transition: 0.3s; }
         .active .switch { background: var(--primary); }
-        .active .switch::after { left: 23px; }
+        .active .switch::after { left: 21px; }
 
         /* --- Signatures --- */
         .signature-grid {
@@ -283,17 +290,17 @@
             margin-top: 80px;
             text-align: center;
         }
-        .sig-line { height: 1px; background: var(--navy); margin-top: 100px; margin-bottom: 10px; opacity: 0.2; }
-        .sig-name { font-weight: 800; color: var(--navy); font-size: 15px; }
+        .sig-line { height: 1px; background: var(--navy); margin-top: 80px; margin-bottom: 10px; opacity: 0.2; }
+        .sig-name { font-weight: 800; color: var(--navy); font-size: 14px; }
 
-        /* --- Responsive & Print --- */
+        /* --- Print --- */
         @media print {
             body { padding: 0; background: white; }
             .toolbar, .btn-add, .delete-btn { display: none !important; }
             .invoice-card { box-shadow: none; border: none; border-radius: 0; }
             .form-control, .table-input { border: none !important; background: none !important; padding: 0 !important; }
-            .payment-card { background: #f1f5f9 !important; color: black !important; }
-            .total-card { background: #f1f5f9 !important; color: black !important; }
+            .payment-card, .total-card { background: #f1f5f9 !important; color: black !important; border: 1px solid #e2e8f0; }
+            .total-currency, .total-value { color: black !important; opacity: 1 !important; }
         }
     </style>
 </head>
@@ -306,11 +313,11 @@
     <div class="btn-group">
         <button class="btn btn-secondary" onclick="resetInvoice()">
             <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-            Reset Data
+            Reset
         </button>
         <button class="btn btn-primary" onclick="exportPDF()">
             <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Simpan PDF
+            Cetak PDF
         </button>
     </div>
 </div>
@@ -400,34 +407,37 @@
                 </tbody>
             </table>
             <button class="btn-add" onclick="addItem()">
-                + Tambah Baris Pekerjaan Baru
+                + Tambah Baris Baru
             </button>
         </section>
 
         <section class="summary-container">
             <div>
                 <span class="section-title">Catatan & Ketentuan</span>
-                <textarea class="form-control" rows="5">1. Pembayaran dianggap sah jika dana sudah masuk ke rekening di atas.
+                <textarea class="form-control" rows="4">1. Pembayaran dianggap sah jika dana sudah masuk ke rekening di atas.
 2. Harap lampirkan bukti transfer via WhatsApp.</textarea>
                 
                 <div class="toggle-ppn" id="ppn-trigger" onclick="togglePPN()">
                     <div class="switch"></div>
-                    <span>Sertakan Pajak PPN (11%)</span>
+                    <span>Sertakan PPN (11%)</span>
                 </div>
             </div>
             <div class="total-card">
                 <div class="subtotal-lines">
                     <div class="sub-line">
                         <span>Subtotal</span>
-                        <span id="subtotal-val">Rp 0</span>
+                        <span id="subtotal-val">0</span>
                     </div>
                     <div class="sub-line" id="ppn-display" style="display: none; color: var(--accent);">
                         <span>PPN (11%)</span>
-                        <span id="ppn-val">Rp 0</span>
+                        <span id="ppn-val">0</span>
                     </div>
                 </div>
-                <div class="total-label">Total Tagihan</div>
-                <div class="total-value" id="total-val">Rp 0</div>
+                <span class="total-label">Total Tagihan</span>
+                <div class="total-value-wrap">
+                    <span class="total-currency">Rp</span>
+                    <span class="total-value" id="total-val">0</span>
+                </div>
             </div>
         </section>
 
@@ -452,8 +462,17 @@
     let isPPN = false;
     let currentStatus = 'waiting';
 
+    function formatNumber(val) {
+        return parseInt(val).toLocaleString('id-ID');
+    }
+
     function formatCurrency(val) {
-        return 'Rp ' + parseInt(val).toLocaleString('id-ID');
+        return 'Rp ' + formatNumber(val);
+    }
+
+    function autoResize(el) {
+        el.style.height = 'auto';
+        el.style.height = el.scrollHeight + 'px';
     }
 
     function render() {
@@ -469,7 +488,13 @@
             const tr = document.createElement('tr');
             tr.className = 'item-row';
             tr.innerHTML = `
-                <td><input type="text" class="table-input" value="${item.desc}" placeholder="Nama pekerjaan..." oninput="updateItem(${idx}, 'desc', this.value)"></td>
+                <td>
+                    <textarea 
+                        class="table-input desc-area" 
+                        oninput="updateItem(${idx}, 'desc', this.value); autoResize(this)"
+                        rows="1"
+                    >${item.desc}</textarea>
+                </td>
                 <td><input type="number" class="table-input" style="text-align:center" value="${item.qty}" min="1" oninput="updateItem(${idx}, 'qty', this.value)"></td>
                 <td><input type="number" class="table-input" style="text-align:right" value="${item.price}" oninput="updateItem(${idx}, 'price', this.value)"></td>
                 <td style="text-align:right; font-weight:800; color:var(--navy)">${formatCurrency(total)}</td>
@@ -480,24 +505,38 @@
                 </td>
             `;
             body.appendChild(tr);
+            autoResize(tr.querySelector('textarea'));
         });
 
+        updateTotals(subtotal);
+    }
+
+    function updateItem(idx, key, val) {
+        items[idx][key] = key === 'desc' ? val : parseFloat(val || 0);
+        if (key !== 'desc') render();
+        else updateTotalsOnly();
+    }
+
+    function updateTotalsOnly() {
+        let subtotal = 0;
+        items.forEach(it => subtotal += it.qty * it.price);
+        updateTotals(subtotal);
+    }
+
+    function updateTotals(subtotal) {
         const ppn = isPPN ? subtotal * 0.11 : 0;
         const totalFinal = subtotal + ppn;
 
         document.getElementById('subtotal-val').innerText = formatCurrency(subtotal);
         document.getElementById('ppn-val').innerText = formatCurrency(ppn);
-        document.getElementById('total-val').innerText = formatCurrency(totalFinal);
-    }
-
-    function updateItem(idx, key, val) {
-        items[idx][key] = key === 'desc' ? val : parseFloat(val || 0);
-        render();
+        document.getElementById('total-val').innerText = formatNumber(totalFinal);
     }
 
     function addItem() {
         items.push({ desc: '', qty: 1, price: 0 });
         render();
+        const textareas = document.querySelectorAll('.desc-area');
+        textareas[textareas.length - 1].focus();
     }
 
     function removeItem(idx) {
@@ -517,23 +556,19 @@
     function cycleStatus() {
         const badge = document.getElementById('status-toggle');
         const text = document.getElementById('status-text');
-        
         const configs = {
             waiting: { label: 'Menunggu Pembayaran', class: 'status-badge status-waiting', next: 'paid' },
             paid: { label: 'Lunas Terbayar', class: 'status-badge status-paid', next: 'cancelled' },
             cancelled: { label: 'Tagihan Dibatalkan', class: 'status-badge status-cancelled', next: 'waiting' }
         };
-
-        const current = configs[currentStatus];
-        currentStatus = current.next;
-        const next = configs[currentStatus];
-
-        text.innerText = next.label;
-        badge.className = next.class;
+        const nextKey = configs[currentStatus].next;
+        currentStatus = nextKey;
+        text.innerText = configs[nextKey].label;
+        badge.className = configs[nextKey].class;
     }
 
     function resetInvoice() {
-        if(confirm('Aksi ini akan menghapus semua inputan. Lanjutkan?')) {
+        if(confirm('Reset semua data?')) {
             items = [{ desc: '', qty: 1, price: 0 }];
             document.querySelectorAll('.form-control').forEach(el => el.value = '');
             render();
@@ -544,15 +579,14 @@
         const element = document.getElementById('invoice-area');
         const options = {
             margin: 0,
-            filename: 'Invoice-DotCom-Partner.pdf',
+            filename: 'Invoice-DotCom.pdf',
             image: { type: 'jpeg', quality: 1 },
-            html2canvas: { scale: 3, useCORS: true, letterRendering: true },
+            html2canvas: { scale: 3, useCORS: true },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
         html2pdf().set(options).from(element).save();
     }
 
-    // Init
     render();
 </script>
 
